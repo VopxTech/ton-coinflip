@@ -1,0 +1,56 @@
+#include "imports/stdlib.fc";
+
+const const::min_bet = 10000000; ;; 0.01 TON
+const const::max_bet = 1000000000; ;; 1 TON
+const const::min_tons_for_storage = 1000000; ;; 0.001 TON
+
+() recv_internal(int msg_value, cell in_msg, slice in_msg_body) impure {
+    slice cs = in_msg.begin_parse();
+    int flags = cs~load_uint(4); ;; first 4 bytes are flags
+    slice sender_address = cs~load_msg_addr(); ;; get the address
+
+    int op = in_msg_body~load_uint(32); ;; OP Code
+
+    ;; Game
+    if (op == 1) {
+        ;; Check that the best is within the min and max bet
+        throw_unless(110, msg_value >= const::min_bet);
+        throw_unless(110, msg_value <= const::max_bet);
+
+        var [balance, _] = get_balance();
+        int win = msg_value * 2;
+
+        ;; Check that the potential win is within the balance
+        throw_unless(111, win < balance);
+
+        randomize_lt();
+        int x = rand(2); ;; generate a random number (either 0 or 1)
+        
+        if (x == 1) { ;; user won
+            int msg_mode = 3;
+
+            var msg = begin_cell()
+            .store_uint(0x18, 6) ;; default values
+            .store_slice(sender_address)
+            .store_coins(win)
+            .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1);
+
+            send_raw_message(msg.end_cell(), msg_mode);
+            return();
+        } else { ;; user lost
+            return();
+        }
+    }
+
+    ;; Deposit
+    if (op == 2) {
+        return();
+    }
+
+    throw(777);
+}
+
+int balance() method_id {
+    var [balance, _] = get_balance();
+    return balance;
+}
