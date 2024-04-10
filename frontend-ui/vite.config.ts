@@ -5,7 +5,7 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), nodePolyfills()],
-  base: "/frontend-ui/",
+  base: "/ton-coinflip/",
   build: {
     outDir: "../docs",
   },
