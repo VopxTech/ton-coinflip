@@ -6,4 +6,7 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 export default defineConfig({
   plugins: [react(), nodePolyfills()],
   base: "/frontend-ui/",
+  build: {
+    outDir: "../docs",
+  },
 });
