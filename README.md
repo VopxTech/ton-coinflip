@@ -2,7 +2,9 @@
 
 Smart contract -based coinflip game on TON blockchain. Written in Func and React Vite. Currently deployed on the testnet:
 
-`<todo: add_url>`
+[Play on Web](https://coinflip.vopx.fi/)
+
+[Play on Telegram](https://t.me/toncoinfliptnetbot/play)
 
 ## Project structure
 
