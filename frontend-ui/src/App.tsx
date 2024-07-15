@@ -13,17 +13,6 @@ function App() {
     "EQCuWDIPWO6fGDN7w4ZpwNtBTEjl6_shllCJnfZptcoWgV-l" // Contract address
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function proxySetBet(e: any) {
-    let value = parseFloat(e.target.value);
-    if (value > 1) {
-      value = 1;
-    } else if (value < 0.001) {
-      value = 0.001;
-    }
-    setBet(value);
-  }
-
   return (
     <div>
       <div>
@@ -58,18 +47,23 @@ function App() {
                 type="number"
                 value={bet}
                 onChange={(e) => {
-                  proxySetBet(e);
+                  setBet(Number(e.target.value));
                 }}
               />
 
-              <p style={{ fontSize: "0.65em" }}>Mix: 0.001 - Max: 1</p>
+              <p style={{ fontSize: "0.65em" }}>Min: 0.001 - Max: 1</p>
 
               <br></br>
 
               <button
                 style={{ marginTop: "10px" }}
                 onClick={() => {
-                  sendPlay(bet);
+                  if (bet < 0.001 || bet > 1) {
+                    alert("Bet must be between 0.001 and 1 TON!");
+                    return;
+                  } else {
+                    sendPlay(bet);
+                  }
                 }}
               >
                 Send 🤞
